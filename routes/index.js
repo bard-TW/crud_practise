@@ -91,7 +91,35 @@ router.get("/stock", function (req, res, next) {
   res.render("stock", { user: "xiaoswaii", show: true });
 });
 
+router.get("/create_member", function (req, res, next) {
+  res.render("create_member");
+});
 
+router.get("/revise_member", function (req, res, next) {
+  
+  // 寫入到json >> public/data/data.json
+  const newData = { user: 'xxx@gmail.com' };
+  fs.writeFile('public/data/data.json', JSON.stringify(newData, null, 2), (err) => {
+    if (err) {
+      console.error('Error writing file:', err);
+      return;
+    }
+  })
+
+  let jsonData
+  // 讀取json >> public/data/data.json
+  fs.readFile('public/data/data.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading file:', err);
+      return;
+    }
+    jsonData = JSON.parse(data);
+
+    // 將資料傳給前端
+    res.render("revise_member", jsonData);
+  });
+
+});
 
 
 module.exports = router;
